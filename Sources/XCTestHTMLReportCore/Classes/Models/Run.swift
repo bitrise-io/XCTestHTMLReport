@@ -85,15 +85,15 @@ struct Run: HTML {
             Logger.warning("Can't find test reference for action \(action.title ?? "")")
             logContent = .none
         }
-                
+
+        let startTime = CFAbsoluteTimeGetCurrent()
+
         let cpuCount = ProcessInfo.processInfo.processorCount
         let operationQueue = OperationQueue()
         operationQueue.maxConcurrentOperationCount = cpuCount * 2
-        
-        let queue = DispatchQueue(label: "com.xchtmlreport.lock")
-        
+
         var summaries = [TestSummary]()
-        
+
         testPlanSummaries.summaries
             .flatMap(\.testableSummaries)
             .forEach { testableSummary in
@@ -105,16 +105,30 @@ struct Run: HTML {
                         downsizeImagesEnabled: downsizeImagesEnabled,
                         downsizeScaleFactor: downsizeScaleFactor
                     )
-                    queue.sync {
-                        summaries.append(summary)
-                    }
+                    summaries.append(summary)
                 }
                 operationQueue.addOperation(operation)
             }
-        
+
         operationQueue.waitUntilAllOperationsAreFinished()
+
+        testSummaries = summaries.sorted { $0.testName < $1.testName }
+
+        print("Test summaries processed in \(CFAbsoluteTimeGetCurrent() - startTime) seconds.")
         
-        testSummaries = summaries.sorted { $0.testName < $1.testName }        
+//        let startTime = CFAbsoluteTimeGetCurrent()
+//
+//        testSummaries = testPlanSummaries.summaries
+//            .flatMap(\.testableSummaries)
+//            .map { TestSummary(
+//                summary: $0,
+//                file: file,
+//                renderingMode: renderingMode,
+//                downsizeImagesEnabled: downsizeImagesEnabled,
+//                downsizeScaleFactor: downsizeScaleFactor
+//            ) }
+//
+//        print("Old: \(CFAbsoluteTimeGetCurrent() - startTime)")
     }
 
     private var logSource: String? {
