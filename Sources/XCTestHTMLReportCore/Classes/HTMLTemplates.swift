@@ -610,7 +610,7 @@ struct HTMLTemplates
         </div>
         <ul id=\"test-log-toolbar\" class=\"toolbar centered-toolbar toggle-toolbar\">
           <li class=\"selected\" onclick=\"showTests(this);\">Tests</li>
-          <li onclick=\"showLogs(this);\">Logs</li>
+  <!--          <li onclick="showLogs(this);">Logs</li>-->
         </ul>
       </header>
       <div id=\"container\">
@@ -1041,14 +1041,14 @@ struct HTMLTemplates
     }
 
     function showLogs(el) {
-      selectedElement(el);
-      setDisplayToElementsWithSelector('#logs', 'flex');
-      setDisplayToElementsWithSelector('.tests', 'none');
+      // selectedElement(el);
+      // setDisplayToElementsWithSelector('#logs', 'flex');
+      // setDisplayToElementsWithSelector('.tests', 'none');
     }
 
     function showTests(el) {
       selectedElement(el);
-      setDisplayToElementsWithSelector('#logs', 'none');
+      // setDisplayToElementsWithSelector('#logs', 'none');
       setDisplayToElementsWithSelector('.tests', 'flex');
     }
 
@@ -1087,14 +1087,14 @@ struct HTMLTemplates
       </div>
       [[TEST_SUMMARIES]]
     </div>
-    <div id=\"logs\">
-      <div id=\"logs-header\">
-        <ul class=\"toolbar toggle-toolbar\">
-          <li class=\"selected\">All Messages</li>
-        </ul>
-      </div>
-      <iframe id=\"logs-iframe\" src=\"[[LOG_SOURCE]]\"></iframe>
-    </div>
+  <!--    <div id="logs">-->
+  <!--      <div id="logs-header">-->
+  <!--        <ul class="toolbar toggle-toolbar">-->
+  <!--          <li class="selected">All Messages</li>-->
+  <!--        </ul>-->
+  <!--      </div>-->
+  <!--      <iframe id="logs-iframe" src="[[LOG_SOURCE]]" title="logs"></iframe>-->
+  <!--    </div>-->
   </div>
   """
 
