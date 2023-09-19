@@ -76,16 +76,18 @@ struct Run: HTML {
 
         // TODO: (Pierre Felgines) 02/10/2019 Use only emittedOutput from logs objects
         // For now XCResultKit do not handle logs
-        if let logReference = action.actionResult.logRef {
-            logContent = file.exportLogsContent(
-                id: logReference.id,
-                renderingMode: renderingMode
-            )
-        } else {
-            Logger.warning("Can't find test reference for action \(action.title ?? "")")
-            logContent = .none
-        }
+//        if let logReference = action.actionResult.logRef {
+//            logContent = file.exportLogsContent(
+//                id: logReference.id,
+//                renderingMode: renderingMode
+//            )
+//        } else {
+//            Logger.warning("Can't find test reference for action \(action.title ?? "")")
+//            logContent = .none
+//        }
 
+        logContent = .none
+        
         let startTime = CFAbsoluteTimeGetCurrent()
 
         let cpuCount = ProcessInfo.processInfo.processorCount
