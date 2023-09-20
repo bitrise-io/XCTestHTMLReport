@@ -918,7 +918,7 @@ struct HTMLTemplates
       hideLinkAttachment();
       var image = document.getElementById('screenshot-'+filename);
       screenshot.style.display = \"block\";
-      screenshot.src = image.src;
+      screenshot.src = image.getAttribute("data-src");
     }
 
     function showVideo(filename) {
