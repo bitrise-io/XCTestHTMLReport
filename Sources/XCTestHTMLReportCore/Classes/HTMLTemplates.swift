@@ -856,7 +856,7 @@ struct HTMLTemplates
         activities.style.display = (activities.style.display == 'block' ? 'none' : 'block');
         var images = activities.getElementsByTagName('img')
         for (var i = 0; i < images.length; i++) {
-              images[i].setAttribute("src", images[i].getAttribute("data-src"));
+              images[i].src = images[i].dataset.src;
         }
       }
 
@@ -918,7 +918,7 @@ struct HTMLTemplates
       hideLinkAttachment();
       var image = document.getElementById('screenshot-'+filename);
       screenshot.style.display = \"block\";
-      screenshot.src = image.getAttribute("data-src");
+      screenshot.src = image.dataset.src;
     }
 
     function showVideo(filename) {
