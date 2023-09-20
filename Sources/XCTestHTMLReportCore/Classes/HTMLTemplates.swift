@@ -854,6 +854,12 @@ struct HTMLTemplates
   
       if (activities) {
         activities.style.display = (activities.style.display == 'block' ? 'none' : 'block');
+        var images = activities.getElementsByTagName('img');
+        if (images[0].src == '') {
+            for (var i = 0; i < images.length; i++) {
+                images[i].src = images[i].dataset.src;
+            }
+        }
       }
 
       if (attachments) {
@@ -914,7 +920,7 @@ struct HTMLTemplates
       hideLinkAttachment();
       var image = document.getElementById('screenshot-'+filename);
       screenshot.style.display = \"block\";
-      screenshot.src = image.src;
+      screenshot.src = image.dataset.src;
     }
 
     function showVideo(filename) {
@@ -1183,7 +1189,7 @@ struct HTMLTemplates
     <span class=\"icon left screenshot-icon\" style=\"margin-left: [[PADDING]]px\"></span>
     [[NAME]]
     <span class=\"icon preview-icon\" data=\"[[FILENAME]]\" onclick=\"showScreenshot('[[FILENAME]]')\"></span>
-    <img class=\"screenshot\" src=\"[[SOURCE]]\" id=\"screenshot-[[FILENAME]]\"/>
+    <img class=\"screenshot\" data-src=\"[[SOURCE]]\" id=\"screenshot-[[FILENAME]]\"/>
   </p>
   """
 
