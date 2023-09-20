@@ -854,14 +854,14 @@ struct HTMLTemplates
   
       if (activities) {
         activities.style.display = (activities.style.display == 'block' ? 'none' : 'block');
+        var images = activities.getElementsByTagName('img')
+        for (var i = 0; i < images.length; i++) {
+              images[i].setAttribute("src", images[i].getAttribute("data-src"));
+        }
       }
 
       if (attachments) {
         attachments.style.display = (attachments.style.display == 'block' ? 'none' : 'block');
-        var images = attachments.getElementsByTagName('img')
-        for (var i = 0; i < images.length; i++) {
-            images[i].setAttributes("src", images[i].getAttribute("data-src"));
-        }
       }
     }
 
