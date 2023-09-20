@@ -855,7 +855,7 @@ struct HTMLTemplates
       if (activities) {
         activities.style.display = (activities.style.display == 'block' ? 'none' : 'block');
         var images = activities.getElementsByTagName('img');
-        if images[0].src == '' {
+        if (images[0].src == '') {
             for (var i = 0; i < images.length; i++) {
                 images[i].src = images[i].dataset.src;
             }
