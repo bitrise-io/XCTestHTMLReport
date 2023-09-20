@@ -858,6 +858,10 @@ struct HTMLTemplates
 
       if (attachments) {
         attachments.style.display = (attachments.style.display == 'block' ? 'none' : 'block');
+        var images = attachments.getElementsByTagName('img')
+        for (var i = 0; i < images.length; i++) {
+            images[i].setAttributes("src", images[i].getAttribute("data-src"));
+        }
       }
     }
 
