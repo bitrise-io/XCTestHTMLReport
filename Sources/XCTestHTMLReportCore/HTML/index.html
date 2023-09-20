@@ -826,7 +826,7 @@
       hideLog();
       var image = document.getElementById('screenshot-'+filename);
       screenshot.style.display = "block";
-      screenshot.src = image.src;
+      screenshot.src = image.dataset.src;
     }
 
     function setDisplayToElementsWithSelector(sel, display) {
