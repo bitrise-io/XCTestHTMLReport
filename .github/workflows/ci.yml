@@ -3,8 +3,6 @@ name: CI
 on:
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
 
 jobs:
   build:
@@ -19,9 +17,9 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: Xcode Select
-      uses: devbotsxyz/xcode-select@v1.1.0
+      uses: maxim-lobanov/setup-xcode@v1
       with:
-        version: ${{ matrix.xcode_version }}
+        xcode-version: ${{ matrix.xcode_version }}
 
     - name: Build
       run: swift build -v -c release --triple ${{ matrix.arch }}

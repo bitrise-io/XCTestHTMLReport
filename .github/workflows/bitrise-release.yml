@@ -1,0 +1,107 @@
+name: Bitrise-Release
+
+on:
+  workflow_dispatch:
+  push:
+   tags:
+   - '[0-9]+.[0-9]+.[0-9]+'
+   - '[0-9]+.[0-9]+.[0-9]+rc[0-9]+'
+
+jobs:
+  build:
+    runs-on: macos-12
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Xcode Select
+      uses: maxim-lobanov/setup-xcode@v1
+      with:
+        xcode-version: 14.2
+
+    - name: Generate Metadata
+      id: metadata
+      run: |
+        [[ "$GITHUB_REF" =~ refs/tags ]] && VERSION=${GITHUB_REF/refs\/tags\//} || exit
+        echo ::set-output name=version::${VERSION}
+        echo ::set-output name=bin_path::.build/universal/release/xchtmlreport
+        echo ::set-output name=archive_name::xchtmlreport-${VERSION}.zip
+
+    - name: Build (arm64)
+      run: swift build -v -c release --triple arm64-apple-macosx
+
+    - name: Build (x86_64)
+      run: swift build -v -c release --triple x86_64-apple-macosx
+
+    - name: Lipo
+      run: |
+        mkdir -p .build/universal/release && \
+        lipo -create -output ${{ steps.metadata.outputs.bin_path }} \
+        .build/arm64-apple-macosx/release/xchtmlreport \
+        .build/x86_64-apple-macosx/release/xchtmlreport
+
+    - name: Package
+      run: |
+        ditto -c -k \
+        --keepParent "${{ steps.metadata.outputs.bin_path }}" \
+        ${{ steps.metadata.outputs.archive_name }}
+
+    - name: Notarize
+      run: |
+        xcrun notarytool submit ${{ steps.metadata.outputs.archive_name }} \
+        --apple-id ${{ secrets.AC_USERNAME }} \
+        --password ${{ secrets.AC_PASSWORD }} \
+        --team-id ${{ secrets.AC_TEAM_ID }} \
+        --wait
+
+    - name: Archive
+      uses: actions/upload-artifact@v2
+      with:
+        name: application
+        path: ${{ steps.metadata.outputs.archive_name }}
+
+  release:
+    runs-on: ubuntu-latest
+    
+    needs: build
+    
+    steps:
+    - name: Download
+      uses: actions/download-artifact@v2
+    
+    - name: Release
+      uses: softprops/action-gh-release@v1
+      with:
+        prerelease: ${{ contains(github.ref, '-') }}
+        generate_release_notes: true
+        files: |
+          application/xchtmlreport-*
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  bump_version:
+    runs-on: ubuntu-latest
+    needs: release
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Get next version
+        uses: reecetech/version-increment@2022.5.1
+        id: version
+        with:
+          scheme: semver
+          increment: patch
+
+      - name: Write version file
+        run: echo 'let version = "${{ steps.version.outputs.version }}"' > Sources/XCTestHTMLReport/Version.swift
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v3
+        with:
+          title: "${{ steps.version.outputs.version }} Version Bump"
+          body: "Bumping version from ${{ steps.version.outputs.current-version }} to ${{ steps.version.outputs.version }}"
+          commit-message: "${{ steps.version.outputs.version }} version bump"
+          branch: "version-bump/${{ steps.version.outputs.version }}"
+          add-paths: Sources/XCTestHTMLReport/Version.swift
+          reviewers: tylervick
+          base: main
