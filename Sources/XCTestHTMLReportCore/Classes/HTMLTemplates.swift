@@ -610,7 +610,7 @@ struct HTMLTemplates
         </div>
         <ul id=\"test-log-toolbar\" class=\"toolbar centered-toolbar toggle-toolbar\">
           <li class=\"selected\" onclick=\"showTests(this);\">Tests</li>
-          <li onclick=\"showLogs(this);\">Logs</li>
+  <!--          <li onclick="showLogs(this);">Logs</li>-->
         </ul>
       </header>
       <div id=\"container\">
@@ -854,6 +854,12 @@ struct HTMLTemplates
   
       if (activities) {
         activities.style.display = (activities.style.display == 'block' ? 'none' : 'block');
+        var images = activities.getElementsByTagName('img');
+        if (images[0].src == '') {
+            for (var i = 0; i < images.length; i++) {
+                images[i].src = images[i].dataset.src;
+            }
+        }
       }
 
       if (attachments) {
@@ -914,7 +920,7 @@ struct HTMLTemplates
       hideLinkAttachment();
       var image = document.getElementById('screenshot-'+filename);
       screenshot.style.display = \"block\";
-      screenshot.src = image.src;
+      screenshot.src = image.dataset.src;
     }
 
     function showVideo(filename) {
@@ -1041,14 +1047,14 @@ struct HTMLTemplates
     }
 
     function showLogs(el) {
-      selectedElement(el);
-      setDisplayToElementsWithSelector('#logs', 'flex');
-      setDisplayToElementsWithSelector('.tests', 'none');
+      // selectedElement(el);
+      // setDisplayToElementsWithSelector('#logs', 'flex');
+      // setDisplayToElementsWithSelector('.tests', 'none');
     }
 
     function showTests(el) {
       selectedElement(el);
-      setDisplayToElementsWithSelector('#logs', 'none');
+      // setDisplayToElementsWithSelector('#logs', 'none');
       setDisplayToElementsWithSelector('.tests', 'flex');
     }
 
@@ -1087,14 +1093,14 @@ struct HTMLTemplates
       </div>
       [[TEST_SUMMARIES]]
     </div>
-    <div id=\"logs\">
-      <div id=\"logs-header\">
-        <ul class=\"toolbar toggle-toolbar\">
-          <li class=\"selected\">All Messages</li>
-        </ul>
-      </div>
-      <iframe id=\"logs-iframe\" src=\"[[LOG_SOURCE]]\"></iframe>
-    </div>
+  <!--    <div id="logs">-->
+  <!--      <div id="logs-header">-->
+  <!--        <ul class="toolbar toggle-toolbar">-->
+  <!--          <li class="selected">All Messages</li>-->
+  <!--        </ul>-->
+  <!--      </div>-->
+  <!--      <iframe id="logs-iframe" src="[[LOG_SOURCE]]" title="logs"></iframe>-->
+  <!--    </div>-->
   </div>
   """
 
@@ -1183,7 +1189,7 @@ struct HTMLTemplates
     <span class=\"icon left screenshot-icon\" style=\"margin-left: [[PADDING]]px\"></span>
     [[NAME]]
     <span class=\"icon preview-icon\" data=\"[[FILENAME]]\" onclick=\"showScreenshot('[[FILENAME]]')\"></span>
-    <img class=\"screenshot\" src=\"[[SOURCE]]\" id=\"screenshot-[[FILENAME]]\"/>
+    <img class=\"screenshot\" data-src=\"[[SOURCE]]\" id=\"screenshot-[[FILENAME]]\"/>
   </p>
   """
 
