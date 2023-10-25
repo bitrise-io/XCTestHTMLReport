@@ -21,7 +21,7 @@ jobs:
     - name: Xcode Select
       uses: maxim-lobanov/setup-xcode@v1
       with:
-        version: ${{ matrix.xcode_version }}
+        xcode-version: ${{ matrix.xcode_version }}
 
     - name: Build
       run: swift build -v -c release --triple ${{ matrix.arch }}
