@@ -24,8 +24,8 @@ jobs:
       run: |
         [[ "$GITHUB_REF" =~ refs/tags ]] && VERSION=${GITHUB_REF/refs\/tags\//} || exit
         echo ::set-output name=version::${VERSION}
-        echo ::set-output name=bin_path::.build/universal/release/xchtmlreport
-        echo ::set-output name=archive_name::xchtmlreport-${VERSION}.zip
+        echo ::set-output name=bin_path::.build/universal/release/xchtmlreport-bitrise
+        echo ::set-output name=archive_name::xchtmlreport-bitrise-${VERSION}.zip
 
     - name: Build (arm64)
       run: swift build -v -c release --triple arm64-apple-macosx
@@ -95,5 +95,4 @@ jobs:
           commit-message: "${{ steps.version.outputs.version }} version bump"
           branch: "version-bump/${{ steps.version.outputs.version }}"
           add-paths: Sources/XCTestHTMLReport/Version.swift
-          reviewers: tylervick
           base: main
