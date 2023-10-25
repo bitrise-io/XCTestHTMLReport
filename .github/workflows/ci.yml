@@ -18,10 +18,10 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-#    - name: Xcode Select
-#      uses: devbotsxyz/xcode-select@v1.1.0
-#      with:
-#        version: ${{ matrix.xcode_version }}
+    - name: Xcode Select
+      uses: maxim-lobanov/setup-xcode@v1
+      with:
+          xcode-version: latest-stable
 
     - name: Build
       run: swift build -v -c release --triple ${{ matrix.arch }}
