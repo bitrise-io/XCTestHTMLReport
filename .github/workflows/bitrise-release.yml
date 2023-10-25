@@ -46,14 +46,6 @@ jobs:
         --keepParent "${{ steps.metadata.outputs.bin_path }}" \
         ${{ steps.metadata.outputs.archive_name }}
 
-    - name: Notarize
-      run: |
-        xcrun notarytool submit ${{ steps.metadata.outputs.archive_name }} \
-        --apple-id ${{ secrets.AC_USERNAME }} \
-        --password ${{ secrets.AC_PASSWORD }} \
-        --team-id ${{ secrets.AC_TEAM_ID }} \
-        --wait
-
     - name: Archive
       uses: actions/upload-artifact@v2
       with:
