@@ -25,7 +25,6 @@ jobs:
         [[ "$GITHUB_REF" =~ refs/tags ]] && VERSION=${GITHUB_REF/refs\/tags\//} || exit
         echo ::set-output name=version::${VERSION}
         echo ::set-output name=bin_path::.build/universal/release/xchtmlreport-bitrise
-        echo ::set-output name=archive_name::xchtmlreport-bitrise-${VERSION}.zip
 
     - name: Build (arm64)
       run: swift build -v -c release --triple arm64-apple-macosx
@@ -40,17 +39,11 @@ jobs:
         .build/arm64-apple-macosx/release/xchtmlreport \
         .build/x86_64-apple-macosx/release/xchtmlreport
 
-    - name: Package
-      run: |
-        ditto -c -k \
-        --keepParent "${{ steps.metadata.outputs.bin_path }}" \
-        ${{ steps.metadata.outputs.archive_name }}
-
-    - name: Archive
+    - name: Upload
       uses: actions/upload-artifact@v2
       with:
         name: application
-        path: ${{ steps.metadata.outputs.archive_name }}
+        path: ${{ steps.metadata.outputs.bin_path }}
 
   release:
     runs-on: ubuntu-latest
