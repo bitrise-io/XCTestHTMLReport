@@ -4,6 +4,7 @@ SanityResults*
 .DS_Store
 /.build
 /Packages
+.idea/
 
 /*.xcodeproj
 xcuserdata/
