@@ -7,7 +7,7 @@ import Foundation
 
 struct TestScreenshotFlow {
     var screenshots: [ScreenshotFlowAttachment]
-    var screenshotsTail: [ScreenshotTailAttachment]
+    var screenshotsTail: [ScreenshotFlowAttachment]
 
     init?(activities: [Activity]?, tailCount _: Int = 3) {
         guard let activities = activities else {
@@ -21,12 +21,12 @@ struct TestScreenshotFlow {
         screenshots = activities
             .flatMap {
                 $0.screenshotAttachments
-                    .map { ScreenshotFlowAttachment(attachment: $0, className: "screenshot-flow") }
+                    .map { ScreenshotFlowAttachment(attachment: $0, className: "screenshot-flow", useLazyLoading: true) }
             }
         screenshotsTail = activities
             .flatMap {
                 $0.screenshotAttachments
-                    .map { ScreenshotTailAttachment(attachment: $0, className: "screenshot-tail") }
+                    .map { ScreenshotFlowAttachment(attachment: $0, className: "screenshot-tail", useLazyLoading: false) }
             }
             .suffix(3)
     }
@@ -43,25 +43,12 @@ private extension Sequence {
 struct ScreenshotFlowAttachment: HTML {
     let attachment: Attachment
     let className: String
+    let useLazyLoading: Bool
 
     var htmlTemplate: String {
-        "<img class=\"\(className)\" data-src=\"[[SRC]]\" id=\"screenshot-[[FILENAME]]\"/>"
-    }
-
-    var htmlPlaceholderValues: [String: String] {
-        [
-            "SRC": attachment.source ?? "",
-            "FILENAME": attachment.filename,
-        ]
-    }
-}
-
-struct ScreenshotTailAttachment: HTML {
-    let attachment: Attachment
-    let className: String
-
-    var htmlTemplate: String {
-        "<img class=\"\(className)\" src=\"[[SRC]]\" id=\"screenshot-[[FILENAME]]\"/>"
+        let tag = useLazyLoading ? "data-src" : "src"
+        
+        return "<img class=\"\(className)\" \(tag)=\"[[SRC]]\" id=\"screenshot-[[FILENAME]]\"/>"
     }
 
     var htmlPlaceholderValues: [String: String] {
