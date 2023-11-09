@@ -706,7 +706,7 @@ struct HTMLTemplates
         showText(path);
       } else if (extension == \"mp4\") {
         showVideo(path);
-      } else if (photoExtensions.indexOf(extension) > 0 || extension.startsWith(\"data:image\")) {
+      } else if (photoExtensions.indexOf(extension) > -1 || extension.startsWith(\"data:image\")) {
         showScreenshot(path);
       } else if (extension == \"gif\") {
         showGif(path);
