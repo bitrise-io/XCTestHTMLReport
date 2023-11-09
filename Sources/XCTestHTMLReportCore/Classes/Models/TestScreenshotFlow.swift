@@ -46,9 +46,9 @@ struct ScreenshotFlowAttachment: HTML {
     let useLazyLoading: Bool
 
     var htmlTemplate: String {
-        let src = useLazyLoading ? "" : "[[SRC]]"
+        let src = useLazyLoading ? "" : "src=\"[[SRC]]\""
         
-        return "<img class=\"\(className)\" data-src=\"[[SRC]]\" src=\"\(src)\"  id=\"screenshot-[[FILENAME]]\"/>"
+        return "<img class=\"\(className)\" data-src=\"[[SRC]]\" \(src)  id=\"screenshot-[[FILENAME]]\"/>"
     }
 
     var htmlPlaceholderValues: [String: String] {
