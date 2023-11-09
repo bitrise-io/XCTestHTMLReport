@@ -7,7 +7,7 @@ import Foundation
 
 struct TestScreenshotFlow {
     var screenshots: [ScreenshotFlowAttachment]
-    var screenshotsTail: [ScreenshotFlowAttachment]
+    var screenshotsTail: [ScreenshotTailAttachment]
 
     init?(activities: [Activity]?, tailCount _: Int = 3) {
         guard let activities = activities else {
@@ -26,7 +26,7 @@ struct TestScreenshotFlow {
         screenshotsTail = activities
             .flatMap {
                 $0.screenshotAttachments
-                    .map { ScreenshotFlowAttachment(attachment: $0, className: "screenshot-tail") }
+                    .map { ScreenshotTailAttachment(attachment: $0, className: "screenshot-tail") }
             }
             .suffix(3)
     }
@@ -46,6 +46,22 @@ struct ScreenshotFlowAttachment: HTML {
 
     var htmlTemplate: String {
         "<img class=\"\(className)\" data-src=\"[[SRC]]\" id=\"screenshot-[[FILENAME]]\"/>"
+    }
+
+    var htmlPlaceholderValues: [String: String] {
+        [
+            "SRC": attachment.source ?? "",
+            "FILENAME": attachment.filename,
+        ]
+    }
+}
+
+struct ScreenshotTailAttachment: HTML {
+    let attachment: Attachment
+    let className: String
+
+    var htmlTemplate: String {
+        "<img class=\"\(className)\" src=\"[[SRC]]\" id=\"screenshot-[[FILENAME]]\"/>"
     }
 
     var htmlPlaceholderValues: [String: String] {
