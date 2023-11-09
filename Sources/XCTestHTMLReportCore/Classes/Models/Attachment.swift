@@ -182,7 +182,7 @@ struct Attachment: HTML {
             }
             return "data:\(mimeType);base64,\(data.base64EncodedString())"
         case let .url(url):
-            return url.relativePath
+            return url.relativePath.makeHTMLfriendly()
         case .none:
             return nil
         }

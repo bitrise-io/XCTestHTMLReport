@@ -53,7 +53,7 @@ struct ScreenshotFlowAttachment: HTML {
 
     var htmlPlaceholderValues: [String: String] {
         [
-            "SRC": attachment.source ?? "",
+            "SRC": attachment.source?.makeHTMLfriendly() ?? "",
             "FILENAME": attachment.filename,
         ]
     }
