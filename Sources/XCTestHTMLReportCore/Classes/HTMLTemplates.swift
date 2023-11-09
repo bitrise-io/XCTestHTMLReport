@@ -600,7 +600,7 @@ struct HTMLTemplates
     </style>
   </head>
 
-  <body>
+  <body onload=\"setInitialState();\">
     <div id=\"content\">
       <header>
         <div id=\"title\">
@@ -1077,6 +1077,18 @@ struct HTMLTemplates
   """
 
   static let run = """
+  <script type=\"text/javascript\">
+    function setInitialState() {
+      var numberOfFailedTests = [[N_OF_FAILED_TESTS]];
+
+      if (numberOfFailedTests <= 0) {
+        return;
+      }
+
+      var element = document.getElementById(\"failed-tests-toolbar-option\");
+      showFailedScenariosOnly(element);
+    }
+  </script>
   <div class=\"run\" id=\"device_[[DEVICE_IDENTIFIER]]\">
     <div class=\"tests\">
       <div class=\"tests-header\">
@@ -1084,7 +1096,7 @@ struct HTMLTemplates
           <li onclick=\"showAllScenarios(this);\" class=\"selected\">All ([[N_OF_TESTS]])</li>
           <li onclick=\"showSuccessfulScenariosOnly(this);\">Passed ([[N_OF_PASSED_TESTS]])</li>
           <li onclick=\"showSkippedScenariosOnly(this);\">Skipped ([[N_OF_SKIPPED_TESTS]])</li>
-          <li onclick=\"showFailedScenariosOnly(this);\">Failed ([[N_OF_FAILED_TESTS]])</li>
+          <li id=\"failed-tests-toolbar-option\" onclick=\"showFailedScenariosOnly(this);\">Failed ([[N_OF_FAILED_TESTS]])</li>
           <li onclick=\"showMixedScenariosOnly(this);\">Mixed ([[N_OF_MIXED_TESTS]])</li>
         </ul>
         <ul class=\"toolbar table-header\">
