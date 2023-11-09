@@ -706,7 +706,7 @@ struct HTMLTemplates
         showText(path);
       } else if (extension == \"mp4\") {
         showVideo(path);
-      } else if (photoExtensions.indexOf(extension) > 0 || extension.startsWith(\"data:image\")) {
+      } else if (photoExtensions.indexOf(extension) > -1 || extension.startsWith(\"data:image\")) {
         showScreenshot(path);
       } else if (extension == \"gif\") {
         showGif(path);
@@ -855,7 +855,7 @@ struct HTMLTemplates
       if (activities) {
         activities.style.display = (activities.style.display == 'block' ? 'none' : 'block');
         var images = activities.getElementsByTagName('img');
-        if (images[0].src == '') {
+        if (images.length > 0 && images[0].src == '') {
             for (var i = 0; i < images.length; i++) {
                 images[i].src = images[i].dataset.src;
             }

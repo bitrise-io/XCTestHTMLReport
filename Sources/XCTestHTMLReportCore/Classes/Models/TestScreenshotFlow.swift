@@ -21,12 +21,12 @@ struct TestScreenshotFlow {
         screenshots = activities
             .flatMap {
                 $0.screenshotAttachments
-                    .map { ScreenshotFlowAttachment(attachment: $0, className: "screenshot-flow") }
+                    .map { ScreenshotFlowAttachment(attachment: $0, className: "screenshot-flow", useLazyLoading: true) }
             }
         screenshotsTail = activities
             .flatMap {
                 $0.screenshotAttachments
-                    .map { ScreenshotFlowAttachment(attachment: $0, className: "screenshot-tail") }
+                    .map { ScreenshotFlowAttachment(attachment: $0, className: "screenshot-tail", useLazyLoading: false) }
             }
             .suffix(3)
     }
@@ -43,9 +43,12 @@ private extension Sequence {
 struct ScreenshotFlowAttachment: HTML {
     let attachment: Attachment
     let className: String
+    let useLazyLoading: Bool
 
     var htmlTemplate: String {
-        "<img class=\"\(className)\" data-src=\"[[SRC]]\" id=\"screenshot-[[FILENAME]]\"/>"
+        let src = useLazyLoading ? "" : "src=\"[[SRC]]\""
+        
+        return "<img class=\"\(className)\" data-src=\"[[SRC]]\" \(src)  id=\"screenshot-[[FILENAME]]\"/>"
     }
 
     var htmlPlaceholderValues: [String: String] {
