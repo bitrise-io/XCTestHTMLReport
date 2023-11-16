@@ -931,7 +931,7 @@ struct HTMLTemplates
       hideLinkAttachment();
       var vid = document.getElementById('video-'+filename);
       video.style.display = \"block\";
-      video.src = vid.src;
+      video.src = vid.dataset.src;
       video.play();
     }
 
@@ -1220,7 +1220,7 @@ struct HTMLTemplates
     <span class=\"icon left video-icon\" style=\"margin-left: [[PADDING]]px\"></span>
     [[NAME]]
     <span class=\"icon preview-icon\" data=\"[[FILENAME]]\" onclick=\"showVideo('[[FILENAME]]')\"></span>
-    <video class=\"video\" controls src=\"[[SOURCE]]\" id=\"video-[[FILENAME]]\" preload=\"none\"/>
+    <video class=\"video\" controls data-src=\"[[SOURCE]]\" id=\"video-[[FILENAME]]\"/>
   </p>
   """
 
