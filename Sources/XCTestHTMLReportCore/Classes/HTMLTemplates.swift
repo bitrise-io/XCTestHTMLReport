@@ -632,11 +632,11 @@ struct HTMLTemplates
         <div id=\"right-sidebar\" class=\"sidebar\">
           <div class=\"resizer\"></div>
           <h2>No Selected Attachment</h2>
-          <img src=\"\" class=\"displayed-screenshot\" id=\"screenshot\"/>
-          <img src=\"\" class=\"displayed-gif\" id=\"gif\"/>
-          <iframe id=\"text-attachment\" src=\"\"></iframe>
+          <img src=\"\" class=\"displayed-screenshot\" id=\"screenshot\" loading=\"lazy\"/>
+          <img src=\"\" class=\"displayed-gif\" id=\"gif\" loading=\"lazy\"/>
+          <iframe id=\"text-attachment\" src=\"\" loading=\"lazy\"></iframe>
           <h2 id=\"file-attachment\"><a target=\"_blank\"/></h2>
-          <video class=\"displayed-video\" controls src=\"\" id=\"video\"/>
+          <video class=\"displayed-video\" controls src=\"\" id=\"video\" preload=\"none\"/>
         </div>
         <div class=\"clear\"></div>
       </div>
@@ -1033,12 +1033,13 @@ struct HTMLTemplates
       for (var i = 0; i < testSummaryGroups.length; i++) {
           var testSummaryGroup = testSummaryGroups[i];
           var children = Array.prototype.slice.call(testSummaryGroup.children);
-          var testSummaries = children.filter(function(a) { return a.classList.contains('test-summary'); });
-          if (testSummaries.length == 0) {
+          var testSummaryChildren = children.filter(function(a) { return a.classList.contains('test-summary'); });
+          var testSummaryGroupChildren = children.filter(function(a) { return a.classList.contains('test-summary-group'); });
+          if (testSummaryChildren == 0 || testSummaryGroupChildren.length > 0) {
             continue;
           }
 
-          if (testSummaries.filter(function(a) { return a.style.display == 'block' }).length == 0) {
+          if (testSummaryChildren.filter(function(a) { return a.style.display == 'block' }).length == 0) {
             testSummaryGroup.style.display = 'none';
           } else {
             testSummaryGroup.style.display = 'block';
@@ -1210,7 +1211,7 @@ struct HTMLTemplates
     <span class="icon left screenshot-icon" style="margin-left: [[PADDING]]px"></span>
     [[NAME]]
   <span class=\"icon preview-icon\" data=\"[[FILENAME]]\" onclick=\"showGif('[[FILENAME]]')\"></span>
-    <img class=\"gif\" src=\"[[SOURCE]]\" id=\"gif-[[FILENAME]]\"/>
+    <img class=\"gif\" src=\"[[SOURCE]]\" id=\"gif-[[FILENAME]]\" loading=\"lazy\"/>
   </p>
   """
 

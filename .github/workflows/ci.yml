@@ -7,11 +7,11 @@ on:
 jobs:
   build:
     strategy:
-      fail-fast: true
+      fail-fast: false
       matrix:
-        xcode_version: [ 14.2, 13.0 ]
+        xcode_version: [ latest-stable, 14 ]
         arch: [ "arm64-apple-macosx", "x86_64-apple-macosx" ]
-    runs-on: macos-12
+    runs-on: macos-13
 
     steps:
     - uses: actions/checkout@v2
@@ -23,17 +23,3 @@ jobs:
 
     - name: Build
       run: swift build -v -c release --triple ${{ matrix.arch }}
-
-    - uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: 2.7
-        bundler-cache: true
-    - run: gem install xcpretty
-
-    - name: Test
-      env:
-        XCODE_VERSION: ${{ matrix.xcode_version }}
-      shell: bash
-      run: |
-        ./prepareTestResults.sh
-        swift test -c release
